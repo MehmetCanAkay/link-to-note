@@ -1,0 +1,16 @@
+Aşağıdaki video bölümünü {dil} özetle. Konuşma başka bir dilde olsa da çıktın {dil} olsun.
+
+Kurallar:
+- Yalnızca bu bölümde geçen bilgileri yaz. Uydurma, tahmin etme.
+- Sayıları, özel isimleri, tarihleri ve iddiaları koru.
+- Kimin ne yaptığını karıştırma. Övgü, tahmin, rakip yorumu ve kanıtsız karşılaştırmalar görüştür; olgu gibi yazma, sahibini belirt ("Konuşmacıya göre ...", "According to <kişi>, ...").
+- Önce bölümü anlatan tek bir paragraf yaz (3-5 cümle).
+- Sonra en önemli noktaları 3-6 maddede listele. Madde için "- " kullan.
+- Başka açıklama, başlık veya selamlama ekleme.
+
+Başlık: {baslik}
+Kanal: {kanal}
+Zaman: {baslangic} – {bitis}
+
+TRANSKRİPT:
+{metin}

@@ -1,0 +1,15 @@
+Aşağıda bir yazının bölüm özetleri var. Yazının tamamını anlatan kısa bir özet yaz. Çıktı dili: {dil}.
+
+Kurallar:
+- 5 ile 8 madde olsun. Her madde "- " ile başlasın ve tek cümle olsun.
+- Yalnızca bölüm özetlerindeki bilgileri kullan.
+- Bilgiyi doğrudan söyle; "Yazı ... anlatıyor", "The article explains" gibi anlatıcı kalıplarını kullanma.
+- Yazının sonundaki noktaları da kapsa; yalnızca girişe odaklanma.
+- Sayı, isim ve iddia uydurma.
+- Maddeler dışında hiçbir şey yazma.
+
+Başlık: {baslik}
+Yazar: {yazar}
+
+BÖLÜM ÖZETLERİ:
+{bolumler}

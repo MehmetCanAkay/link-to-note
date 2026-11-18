@@ -1,0 +1,36 @@
+Metinden web aramasıyla kontrol edilmeye DEĞER olgusal iddiaları çıkar.
+Kontrole değer iddia yoksa boş liste döndürmek doğru ve beklenen bir sonuçtur. Liste doldurmak için iddia uydurma.
+
+Yalnızca JSON yaz:
+{"iddialar": [{"iddia": "...", "sorgu": "..."}]}
+
+ALINACAKLAR: dış dünya hakkında, doğru ya da yanlış olabilen somut savlar.
+- Sayı, istatistik, tarih, fiyat, sürüm, sıralama ("X şirketi 2025'te Y'yi çıkardı", "Z modeli şu testte %80 aldı")
+- Kişi, kurum veya ürün hakkında olgu ("X, Y şirketinin CEO'sudur")
+- Bilimsel, tarihsel veya teknik olgu ("Işık boşlukta saniyede yaklaşık 300.000 km yol alır")
+
+ALINMAYACAKLAR:
+- Yazarın veya konuşmacının kendisi hakkında söyledikleri (deneyimi, okudukları, hisleri, planları, mesleği)
+- İçeriğin kendisi hakkındaki cümleler ("bu yazıda 8 terim anlatılıyor", "bu yol haritası 2026 için hazırlandı", "bir sonraki bölümde")
+- Kavram tanımları ve açıklamaları ("harness, modelin etrafındaki yazılımdır")
+- Herkesin bildiği veya bir ürünün kendi tanıtım cümlesi olan sıradan bilgiler ("Harvard CS50 dersini verir", "vLLM yüksek verimli model sunumu için kullanılır", "Python bir programlama dilidir")
+- Görüş, tavsiye, tahmin, benzetme, espri, belirsiz genellemeler
+- Kaynakça, dipnot, referans listesi, kitap/yayın künyesi, katalog kodu, "daha fazla bilgi" bağlantıları
+- İçeriğin ana konusuyla ilgisi zayıf yan bilgiler; ana konuya dair en önemli savları seç
+
+ÖNCELİK (yukarıdan aşağı):
+1. Yanlış çıkarsa okuru yanıltacak, şaşırtıcı veya yeni olaylar ("X ülkesi Y yasasını geçen ay yürürlükten kaldırdı")
+2. Sayı, yüzde, tarih, sürüm, fiyat, sıralama içeren savlar
+3. Zamanla eskiyebilecek bilgiler (bir ürünün özelliği, bir kurumun kararı, bir yasa)
+4. Kişi veya kurum hakkında somut olgular ("X şirketi Y'yi yayımladı")
+
+Kurallar:
+- En fazla {max} iddia; en önemlilerini seç. Kontrole değer olanlar azsa az iddia döndür.
+- Metinde 1. öncelikte bir olay (bir hükümetin, şirketin veya kişinin yakın tarihli kararı, açıklaması, yasası) geçiyorsa yan bilgi gibi görünse de mutlaka al.
+- iddia: tek cümle, kendi başına anlaşılır, zamirsiz. {dil} yaz.
+- Göreli zaman ifadelerini ("iki gün önce", "geçen hafta", "yakında") iddiaya yazma, tarih de hesaplama; olayı zamansız yaz ("Anthropic released Claude Opus 5.5"). Metinde açıkça yazan mutlak tarihi koru. Yayın tarihi bilinmiyorsa zaman ifadesini iddiadan çıkar.
+- sorgu: iddiayı arama motorunda kontrol etmek için 4-10 kelimelik kısa arama sorgusu, {dil}. Özel isimleri ve sayıları içersin.
+- Metinde olmayan bir şey yazma.
+
+METİN:
+{metin}

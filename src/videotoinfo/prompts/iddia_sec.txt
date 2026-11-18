@@ -1,0 +1,12 @@
+Aday iddialardan en fazla {max} tanesini seç.
+Web aramasıyla kontrol edilebilir, tekrar etmeyen, içeriğin asıl olgusal savları olanları tut.
+Önce yanlış çıkarsa okuru yanıltacak, şaşırtıcı, yeni veya sayı/tarih içeren iddiaları seç.
+Yazarın kendisi hakkındaki cümleleri, içeriğin kendisini anlatan cümleleri, tanımları, görüşleri ve herkesin bildiği sıradan bilgileri atla.
+Bir aracın veya protokolün ne işe yaradığını söyleyen cümleler ("vLLM yüksek verimli sunum için kullanılır", "MCP, uygulamaları araçlara standart biçimde bağlar") tanımdır; seçme.
+Sayıyı doldurmak için zayıf iddia seçme; uygun aday azsa daha az seçmek doğrudur.
+İddiaları birebir kopyala, değiştirme.
+Yalnızca JSON yaz:
+{"iddialar": ["..."]}
+
+ADAYLAR:
+{adaylar}

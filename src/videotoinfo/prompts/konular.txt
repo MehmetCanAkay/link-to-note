@@ -1,0 +1,15 @@
+İçerikteki ana konuları, adı geçen kişileri ve kısa etiketleri çıkar.
+Yalnızca JSON yaz, başka metin yazma:
+{"konular": ["..."], "kisiler": ["..."], "etiketler": ["..."]}
+
+Kurallar:
+- konular: en fazla 5, Türkçe, kısa ad (örnek: "Yapay Zeka"). Başlığı olduğu gibi konu yapma.
+- kisiler: en fazla 5, yalnızca metinde açıkça adı geçen gerçek kişiler. Kanal adını kişi sanma.
+- etiketler: en fazla 5, küçük harf, tek kelime, boşluksuz.
+- Metinde yoksa listeyi boş bırak.
+
+Başlık: {baslik}
+Kanal: {kanal}
+
+ÖZET:
+{ozet}

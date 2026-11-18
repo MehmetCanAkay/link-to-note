@@ -1,0 +1,15 @@
+Aşağıda bir videonun bölüm özetleri var. Videonun tamamını anlatan kısa bir özet yaz. Çıktı dili: {dil}.
+
+Kurallar:
+- 5 ile 8 madde olsun. Her madde "- " ile başlasın ve tek cümle olsun.
+- Yalnızca bölüm özetlerindeki bilgileri kullan.
+- Videonun sonundaki noktaları da kapsa; yalnızca girişe odaklanma.
+- Sayı, isim ve iddia uydurma.
+- Bölüm özetlerinde birine atfedilmiş görüşü olgu gibi yazma; sahibini koru.
+- Maddeler dışında hiçbir şey yazma.
+
+Başlık: {baslik}
+Kanal: {kanal}
+
+BÖLÜM ÖZETLERİ:
+{bolumler}

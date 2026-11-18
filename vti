@@ -1,0 +1,6 @@
+#!/bin/zsh
+# macOS, site-packages içindeki .pth dosyalarını gizli sayıp yok sayabiliyor.
+# Bu yüzden paket dosya olarak kurulur.
+cd "${0:A:h}"
+export UV_NO_EDITABLE=1
+exec uv run --no-editable vti "$@"

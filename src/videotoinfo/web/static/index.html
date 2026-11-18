@@ -1,0 +1,425 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>VideoToInfo</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#F4F5F7;--card:#fff;--line:#E2E5EA;--ink:#15171C;--ink2:#2C303A;--mute:#4A5060;--mute2:#6A7080;--brand:#3446D6;--brand-d:#23309E;--brand-bg:#EEF0FC;--ok:#1D7A4A;--err:#B3261E;--err-bg:#FBEAE8;--mono:'IBM Plex Mono',monospace}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.5 'IBM Plex Sans',system-ui,sans-serif}
+a{color:var(--brand)}a:hover{color:var(--brand-d)}
+button,input,select{font:inherit}
+.wrap{max-width:1200px;margin:0 auto;padding:0 24px}
+header{background:var(--card);border-bottom:1px solid var(--line)}
+header .wrap{padding-top:14px;padding-bottom:14px;display:flex;flex-wrap:wrap;align-items:center;gap:16px 32px}
+.logo{display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--ink);font-weight:700;font-size:17px}
+.logo i{width:32px;height:32px;border-radius:8px;background:var(--ink);display:flex;align-items:center;justify-content:center}
+nav{display:flex;flex-wrap:wrap;gap:4px;flex:1}
+nav a{padding:10px 14px;border-radius:8px;color:var(--mute);text-decoration:none;display:flex;gap:8px;align-items:center}
+nav a.on{background:var(--brand-bg);color:var(--brand-d);font-weight:600}
+.badge{font-size:12px;font-weight:600;background:var(--brand);color:#fff;border-radius:999px;padding:1px 8px}
+.model{display:flex;align-items:center;gap:8px;font:13px var(--mono);color:var(--mute)}
+.dot{width:8px;height:8px;border-radius:50%;background:#9AA0AE}.dot.ok{background:var(--ok)}.dot.bad{background:var(--err)}
+main{padding-top:40px;padding-bottom:64px;display:flex;flex-direction:column;gap:32px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:28px}
+h1{margin:0;font-size:28px;letter-spacing:-.02em}h2{margin:0;font-size:18px;font-weight:600}
+.row{display:flex;flex-wrap:wrap;gap:12px;align-items:center}
+.between{justify-content:space-between}
+.muted{color:var(--mute)}
+.btn{min-height:44px;padding:0 18px;border-radius:10px;border:1.5px solid #C9CED8;background:#fff;color:var(--ink2);cursor:pointer;display:inline-flex;align-items:center;gap:8px;text-decoration:none}
+.btn.pri{background:var(--brand);border-color:var(--brand);color:#fff;font-weight:600}
+.btn.dark{background:var(--ink);border-color:var(--ink);color:#fff;font-weight:600}
+.btn:disabled{opacity:.5;cursor:default}
+.chip{min-height:44px;padding:0 16px;border-radius:999px;border:1.5px solid #C9CED8;background:#fff;color:var(--ink2);cursor:pointer;display:flex;align-items:center;gap:8px}
+.chip[aria-pressed=true]{background:var(--ink);border-color:var(--ink);color:#fff;font-weight:500}
+.field{display:flex;flex-direction:column;gap:6px}
+.field label{font-size:14px;font-weight:500}
+.inp{min-height:44px;padding:0 12px;border:1.5px solid #C9CED8;border-radius:10px;background:#fff;font-size:14px;min-width:0}
+.mono{font-family:var(--mono)}
+.linkbox{flex:1 1 420px;display:flex;align-items:center;gap:10px;border:1.5px solid #C9CED8;border-radius:12px;padding:0 16px;background:#fff;min-height:56px}
+.linkbox input{flex:1;border:0;outline:0;font-size:16px;background:transparent;min-width:0}
+.tag{font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--brand-d);background:var(--brand-bg);border-radius:6px;padding:4px 8px}
+.tag.bad{color:var(--err);background:var(--err-bg)}
+.seg{display:flex;background:#E8EAEE;border-radius:10px;padding:3px}
+.seg button{border:0;background:transparent;border-radius:8px;padding:8px 14px;min-height:38px;color:var(--mute);cursor:pointer}
+.seg button.on{background:#fff;color:var(--ink);font-weight:600}
+ul.list{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:12px}
+.item{display:flex;flex-wrap:wrap;gap:20px;align-items:flex-start;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:20px;text-decoration:none;color:var(--ink)}
+.item:hover{border-color:#B8BEFA}
+.thumb{width:136px;height:76px;border-radius:10px;background:#1F2330;display:flex;align-items:flex-end;justify-content:flex-end;padding:6px;flex:0 0 auto}
+.thumb span{font:12px var(--mono);color:#fff;background:rgba(0,0,0,.6);border-radius:4px;padding:1px 6px}
+.hashtag{font-size:13px;color:var(--mute);background:#F0F1F4;border-radius:6px;padding:2px 8px}
+.empty{background:var(--card);border:1px dashed #C9CED8;border-radius:14px;padding:28px;color:var(--mute)}
+.err{background:var(--err-bg);color:var(--err);border-radius:10px;padding:12px 14px;font-size:14px}
+.okmsg{background:#E7F3EC;color:#15603A;border-radius:10px;padding:12px 14px;font-size:14px}
+.cols{display:flex;flex-wrap:wrap;gap:24px;align-items:flex-start}
+.cols>*{flex:1 1 420px;min-width:0}
+.steps{list-style:none;margin:0;padding:8px 0}
+.steps li{display:flex;gap:16px;padding:16px 24px}
+.sdot{flex:0 0 24px;height:24px;border-radius:50%;border:2px solid #C9CED8;display:flex;align-items:center;justify-content:center;margin-top:1px}
+.sdot.done{background:var(--ok);border-color:var(--ok)}.sdot.act{border-color:var(--brand);background:var(--brand-bg)}
+.sdot.act::after{content:"";width:8px;height:8px;border-radius:50%;background:var(--brand);animation:p 1.2s infinite}
+@keyframes p{50%{opacity:.25}}
+.log{background:var(--ink);color:#D7DAE2;border-radius:16px;overflow:hidden}
+.log h2{color:#fff;font-size:14px;padding:14px 20px;border-bottom:1px solid #2A2E38}
+.log pre{margin:0;padding:20px;font:13px/1.8 var(--mono);white-space:pre-wrap;max-height:460px;overflow:auto}
+.log .e{color:#FF9A93}.log .w{color:#F2C879}
+.pill{font-size:12px;font-weight:600;border-radius:999px;padding:3px 10px}
+.v-dogru{background:#E6F0F9;color:#1A5E99}.v-yanlis{background:#FBEDE3;color:#9A410B}.v-eksik{background:#FAF1D9;color:#765300}.v-eskimis{background:#F0EBF8;color:#5B3F96}.v-dogrulanamadi{background:#ECEEF2;color:#454B5A}
+.claim{border-top:1px solid #ECEEF2;padding:14px 0;display:flex;flex-direction:column;gap:8px}
+.claim p{margin:0;font-size:14px}.claim .why{color:var(--mute);font-size:13px}
+.sect{font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:.08em;color:var(--mute)}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:20px}
+.bar{height:6px;background:#E8EAEE;border-radius:999px;overflow:hidden}.bar i{display:block;height:100%;background:var(--brand)}
+.player{display:flex;flex-wrap:wrap;align-items:center;gap:16px}
+.player audio{flex:1 1 320px;min-width:0}
+.btn.del{color:var(--err);border-color:#E7B7B2}
+.chat{display:flex;flex-direction:column;gap:12px;max-height:520px;overflow:auto}
+.msg{border-radius:12px;padding:10px 14px;line-height:1.6;white-space:pre-wrap;overflow-wrap:anywhere;font-size:14px;max-width:92%}
+.msg.u{align-self:flex-end;background:var(--brand);color:#fff}
+.msg.a{align-self:flex-start;background:#F0F1F4;color:var(--ink2)}
+.chatform{display:flex;gap:8px;align-items:flex-end}
+.chatform textarea{flex:1;min-height:44px;max-height:160px;padding:10px 12px;border:1.5px solid #C9CED8;border-radius:10px;font:inherit;font-size:14px;resize:vertical;min-width:0}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+@media(max-width:600px){.card{padding:20px}h1{font-size:24px}}
+</style>
+</head>
+<body>
+<header><div class="wrap">
+  <a class="logo" href="#/"><i><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 5h11v14H4z"/><path d="M15 10l5-3v10l-5-3"/></svg></i>VideoToInfo</a>
+  <nav aria-label="Ana menü">
+    <a href="#/" id="n-lib">Kütüphane</a>
+    <a href="#/jobs" id="n-jobs">İşlemler <span class="badge" id="n-badge" hidden>0</span></a>
+    <a href="#/settings" id="n-set">Ayarlar</a>
+  </nav>
+  <div class="model"><span class="dot" id="m-dot"></span><span id="m-text">Ollama</span></div>
+</div></header>
+<main class="wrap" id="app"></main>
+
+<script>
+const $ = (s, r = document) => r.querySelector(s);
+const esc = (v) => String(v ?? '').replace(/[&<>"']/g, (c) => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const safeUrl = (u) => (/^https?:\/\//i.test(u) ? u : '#');
+const api = async (path, opt) => {
+  const r = await fetch(path, opt && opt.body ? { ...opt, headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(opt.body) } : opt);
+  const j = await r.json().catch(() => ({}));
+  if (!r.ok) throw new Error(j.detail || j.hata || 'İstek başarısız');
+  return j;
+};
+const fmtDur = (s) => { s = Math.round(s || 0); const h = Math.floor(s / 3600), m = Math.floor(s % 3600 / 60), x = s % 60; return (h ? h + ':' + String(m).padStart(2, '0') : m) + ':' + String(x).padStart(2, '0'); };
+const fmtDate = (d) => { if (!d) return ''; const t = new Date(d); return isNaN(t) ? d : t.toLocaleDateString('tr-TR', { day: 'numeric', month: 'short', year: 'numeric' }); };
+const HUKUM = { dogru: 'Doğru', yanlis: 'Yanlış', eksik: 'Eksik', eskimis: 'Eskimiş', dogrulanamadi: 'Doğrulanamadı' };
+let timer = null;
+const stop = () => { if (timer) { clearInterval(timer); timer = null; } };
+const SVG = {
+  link: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#6A7080" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1"/><path d="M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1"/></svg>',
+  arrow: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="M13 6l6 6-6 6"/></svg>'
+};
+
+/* ---------- üst çubuk ---------- */
+async function refreshChrome() {
+  try {
+    const s = await api('/api/status');
+    $('#m-dot').className = 'dot ' + (s.ollama && s.model_kurulu ? 'ok' : 'bad');
+    $('#m-text').textContent = 'Ollama · ' + s.model + (!s.ollama ? ' · kapalı' : !s.model_kurulu ? ' · kurulu değil' : '');
+  } catch { $('#m-dot').className = 'dot bad'; }
+  try {
+    const jobs = await api('/api/jobs');
+    const n = jobs.filter((j) => j.durum === 'bekliyor' || j.durum === 'calisiyor').length;
+    $('#n-badge').hidden = !n; $('#n-badge').textContent = n;
+  } catch {}
+}
+function setNav(id) { ['n-lib', 'n-jobs', 'n-set'].forEach((x) => $('#' + x).classList.toggle('on', x === id)); }
+
+/* ---------- Kütüphane ---------- */
+const lib = { link: '', dogrula: true, ses: false, bastan: false, tur: 'hepsi', q: '', err: '' };
+function linkTur(u) {
+  const l = u.trim().toLowerCase();
+  if (!/^https?:\/\//.test(l)) return '';
+  if (/\.pdf(\?|$)/.test(l) || /\/\/(www\.)?(x|twitter)\.com/.test(l) || /\/\/t\.co/.test(l)) return 'Desteklenmiyor';
+  return /youtube\.com|youtu\.be|vimeo\.com|tiktok\.com|instagram\.com|twitch\.tv/.test(l) ? 'Video' : 'Yazı';
+}
+async function viewLibrary() {
+  setNav('n-lib'); stop();
+  const items = await api('/api/library').catch(() => []);
+  const app = $('#app');
+  app.innerHTML = `
+  <section class="card" style="display:flex;flex-direction:column;gap:20px" aria-labelledby="t1">
+    <div><h1 id="t1">Bir bağlantı yapıştır, Türkçe notunu al</h1>
+    <p class="muted" style="margin:6px 0 0">Video veya yazı. Her şey bu bilgisayarda işlenir: Whisper ile yazıya dökülür, yerel modelle özetlenir, Obsidian vault'una yazılır.</p></div>
+    <form id="add" class="row" style="align-items:stretch">
+      <label for="link" class="sr">Bağlantı</label>
+      <div class="linkbox">${SVG.link}<input id="link" type="url" placeholder="https://www.youtube.com/watch?v=… veya bir yazı bağlantısı" autocomplete="off"><span class="tag" id="ltag" hidden></span></div>
+      <button class="btn pri" id="go" style="min-height:56px;padding:0 28px;font-size:16px">İşle ${SVG.arrow}</button>
+    </form>
+    <div id="lerr" class="err" hidden></div>
+    <div class="row" id="opts"></div>
+  </section>
+  <section aria-labelledby="t2" style="display:flex;flex-direction:column;gap:16px">
+    <div class="row between"><h2 id="t2" style="font-size:20px">Kütüphane <span class="muted" style="font-weight:400" id="cnt"></span></h2>
+      <div class="row" style="gap:8px"><div class="seg" role="group" aria-label="Tür" id="seg"></div>
+      <label class="sr" for="q">Ara</label><input class="inp" id="q" type="search" placeholder="Başlık, etiket ara" style="width:220px"></div></div>
+    <ul class="list" id="items"></ul>
+  </section>`;
+  const link = $('#link');
+  link.value = lib.link;
+  const tag = () => { const t = linkTur(link.value); $('#ltag').hidden = !t; $('#ltag').textContent = t; $('#ltag').className = 'tag' + (t === 'Desteklenmiyor' ? ' bad' : ''); };
+  tag();
+  link.oninput = () => { lib.link = link.value; tag(); };
+  const opts = () => {
+    $('#opts').innerHTML = [['dogrula', "İddiaları web'de doğrula"], ['ses', 'Kısa özeti seslendir (yalnız video)'], ['bastan', 'Baştan üret']]
+      .map(([k, t]) => `<button type="button" class="chip" data-k="${k}" aria-pressed="${lib[k]}">${t}</button>`).join('');
+    $('#opts').querySelectorAll('button').forEach((b) => b.onclick = () => { lib[b.dataset.k] = !lib[b.dataset.k]; opts(); });
+  };
+  opts();
+  const err = $('#lerr'); err.hidden = !lib.err; err.textContent = lib.err;
+  $('#add').onsubmit = async (e) => {
+    e.preventDefault(); lib.err = ''; err.hidden = true;
+    try {
+      const j = await api('/api/jobs', { method: 'POST', body: { url: link.value, dogrula: lib.dogrula, ses: lib.ses, bastan: lib.bastan } });
+      lib.link = ''; location.hash = '#/jobs/' + j.id;
+    } catch (x) { lib.err = x.message; err.textContent = x.message; err.hidden = false; }
+  };
+  const paint = () => {
+    const f = items.filter((i) => (lib.tur === 'hepsi' || i.tur === lib.tur) &&
+      (!lib.q || (i.baslik + ' ' + i.kanal + ' ' + i.etiketler.join(' ')).toLowerCase().includes(lib.q.toLowerCase())));
+    $('#cnt').textContent = '· ' + f.length + ' kayıt';
+    $('#seg').innerHTML = [['hepsi', 'Tümü'], ['video', 'Video'], ['yazi', 'Yazı']].map(([k, t]) => `<button type="button" data-k="${k}" class="${lib.tur === k ? 'on' : ''}">${t}</button>`).join('');
+    $('#seg').querySelectorAll('button').forEach((b) => b.onclick = () => { lib.tur = b.dataset.k; paint(); });
+    $('#items').innerHTML = f.length ? f.map((i) => `<li><a class="item" href="#/item/${encodeURIComponent(i.id)}">
+      <div class="thumb">${i.tur === 'video' ? `<span>${fmtDur(i.sure)}</span>` : '<span>Yazı</span>'}</div>
+      <div style="flex:999 1 320px;min-width:0;display:flex;flex-direction:column;gap:6px">
+        <div style="font-size:17px;font-weight:600;line-height:1.35">${esc(i.baslik)}</div>
+        <div class="muted" style="font-size:14px">${esc([i.kanal, fmtDate(i.tarih), i.platform].filter(Boolean).join(' · '))}</div>
+        ${i.ozet ? `<p style="margin:4px 0 0;font-size:14px;color:var(--ink2)">${esc(i.ozet)}</p>` : ''}
+        <div class="row" style="gap:6px;margin-top:6px">${i.etiketler.map((e) => `<span class="hashtag">#${esc(e)}</span>`).join('')}</div></div>
+      <div style="display:flex;flex-direction:column;gap:6px;align-items:flex-end;font-size:13px">
+        <span style="color:${i.ozetli ? 'var(--ok)' : 'var(--mute)'};font-weight:500">${i.ozetli ? 'Özet · ' + i.bolum + ' bölüm' : 'Özet yok'}</span>
+        ${i.iddia ? `<span class="muted">${i.iddia} iddia kontrol edildi</span>` : ''}${i.ses ? '<span class="muted">Sesli özet</span>' : ''}</div></a></li>`).join('')
+      : `<li class="empty">${items.length ? 'Aramaya uyan kayıt yok.' : 'Henüz kayıt yok. Yukarıya bir bağlantı yapıştırın.'}</li>`;
+  };
+  $('#q').value = lib.q; $('#q').oninput = (e) => { lib.q = e.target.value; paint(); };
+  paint();
+}
+
+/* ---------- İşlem durumu ---------- */
+async function viewJobs(id) {
+  setNav('n-jobs'); stop();
+  const app = $('#app');
+  const jobs = await api('/api/jobs').catch(() => []);
+  if (!id) { const aktif = jobs.find((j) => j.durum === 'calisiyor' || j.durum === 'bekliyor') || jobs[0]; if (aktif) id = aktif.id; }
+  const bek = await api('/api/queue').catch(() => ({ bekleyen: [] }));
+  app.innerHTML = `
+  <div id="jobhead"></div>
+  <div class="cols"><section class="card" style="padding:8px 0" aria-label="Adımlar"><ol class="steps" id="steps"></ol></section>
+  <section class="log" aria-labelledby="lh"><h2 id="lh">Kayıt</h2><pre id="log"></pre></section></div>
+  <section style="display:flex;flex-direction:column;gap:12px"><h2>Gelen kutusu <span class="muted" style="font-weight:400">· Obsidian'daki bekleyen bağlantılar</span></h2>
+  <div class="empty row between" id="inbox"></div></section>
+  <section style="display:flex;flex-direction:column;gap:12px"><h2>Geçmiş işlemler</h2><ul class="list" id="hist"></ul></section>`;
+  $('#inbox').innerHTML = `<span>${bek.bekleyen.length ? esc(bek.bekleyen.length) + ' bekleyen bağlantı var.' : 'Bekleyen bağlantı yok. Obsidian\'daki "Gelen kutusu" notuna bağlantı yapıştırın.'}</span>
+    <button class="btn" id="runq" ${bek.bekleyen.length ? '' : 'disabled'}>Kuyruğu işle</button>`;
+  $('#runq').onclick = async () => { try { const j = await api('/api/queue/run', { method: 'POST' }); location.hash = '#/jobs/' + j.id; } catch (x) { alert(x.message); } };
+  $('#hist').innerHTML = jobs.length ? jobs.map((j) => `<li><a class="item" href="#/jobs/${j.id}" style="padding:14px 20px;align-items:center">
+    <span class="tag ${j.durum === 'hata' ? 'bad' : ''}">${{ bekliyor: 'Sırada', calisiyor: 'Çalışıyor', bitti: 'Bitti', hata: 'Hata' }[j.durum]}</span>
+    <span style="flex:1;min-width:0;overflow-wrap:anywhere">${esc(j.baslik || j.url)}</span>
+    <span class="muted mono" style="font-size:13px">${new Date(j.olusturma * 1000).toLocaleTimeString('tr-TR')}</span></a></li>`).join('')
+    : '<li class="empty">Bu oturumda işlem yok.</li>';
+  if (!id) { $('#jobhead').innerHTML = '<div class="empty">Çalışan işlem yok. Kütüphane ekranından bir bağlantı ekleyin.</div>'; $('#steps').innerHTML = ''; $('#log').textContent = ''; return; }
+  const paint = async () => {
+    let j; try { j = await api('/api/jobs/' + id); } catch { return stop(); }
+    const calisiyor = j.durum === 'calisiyor' || j.durum === 'bekliyor';
+    $('#jobhead').innerHTML = `<div class="row between" style="align-items:flex-end"><div style="min-width:0;flex:1 1 480px">
+      <div class="sect" style="color:var(--brand)">${{ bekliyor: 'Sırada', calisiyor: 'İşleniyor', bitti: 'Tamamlandı', hata: 'Hata' }[j.durum]} · ${{ video: 'Video', yazi: 'Yazı', kuyruk: 'Gelen kutusu' }[j.tur]}</div>
+      <h1 style="font-size:26px;overflow-wrap:anywhere">${esc(j.baslik || j.url)}</h1>
+      <div class="muted" style="font-size:14px;overflow-wrap:anywhere">${esc(j.url)}</div></div></div>
+      ${j.durum === 'hata' ? `<div class="err" style="margin-top:16px">${esc(j.hata)}</div>` : ''}
+      ${j.durum === 'bitti' && j.tur !== 'kuyruk' ? '<div class="okmsg" style="margin-top:16px">Not yazıldı. Kütüphaneden açabilirsiniz.</div>' : ''}`;
+    $('#steps').innerHTML = j.adimlar.map((ad, i) => {
+      const st = j.durum === 'bitti' || i < j.adim ? 'done' : (i === j.adim && calisiyor ? 'act' : '');
+      const atlandi = (i === 4 && !j.secenek.ses) || (i === 3 && !j.secenek.dogrula);
+      return `<li><span class="sdot ${st}" aria-hidden="true">${st === 'done' ? '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5L20 7"/></svg>' : ''}</span>
+        <div><div style="font-weight:600;${st || i === 0 ? '' : 'color:var(--mute2)'}">${esc(ad)}</div>
+        <div class="muted" style="font-size:13px">${atlandi ? 'Atlanacak' : st === 'act' ? 'Çalışıyor…' : st === 'done' ? 'Bitti' : 'Bekliyor'}</div></div></li>`;
+    }).join('');
+    const lg = $('#log'); const alta = lg.scrollTop + lg.clientHeight >= lg.scrollHeight - 30;
+    lg.innerHTML = j.log.length ? j.log.map((l) => `<span class="${/^Hata/.test(l.m) ? 'e' : /^Uyarı/.test(l.m) ? 'w' : ''}">${esc(l.t)}  ${esc(l.m)}</span>`).join('\n') : (j.durum === 'bekliyor' ? 'Sırada bekliyor…' : '');
+    if (alta) lg.scrollTop = lg.scrollHeight;
+    if (!calisiyor) { stop(); refreshChrome(); }
+  };
+  await paint();
+  timer = setInterval(() => { paint(); refreshChrome(); }, 1500);
+}
+
+/* ---------- Video detayı ---------- */
+async function viewItem(id) {
+  setNav('n-lib'); stop();
+  const app = $('#app');
+  let d; try { d = await api('/api/item/' + encodeURIComponent(id)); } catch (x) { app.innerHTML = `<a href="#/">← Kütüphane</a><div class="err">${esc(x.message)}</div>`; return; }
+  const o = d.ozet_veri || {};
+  const say = {}; d.iddialar.forEach((c) => { say[c.hukum] = (say[c.hukum] || 0) + 1; });
+  const kisa = (o.kisa || '').split('\n').map((s) => s.replace(/^\s*[-•]\s*/, '').trim()).filter(Boolean);
+  const vid = d.tur === 'video';
+  const tsUrl = (s) => vid && /youtube\.com|youtu\.be/.test(d.url) ? safeUrl(d.url) + (d.url.includes('?') ? '&' : '?') + 't=' + Math.floor(s) : '';
+  const list = (t, a) => a && a.length ? `<div style="display:flex;flex-direction:column;gap:8px"><span class="sect">${t}</span><div class="row" style="gap:6px">${a.map((x) => `<span style="font-size:13px;border:1px solid #D5D9E0;border-radius:6px;padding:3px 10px">${esc(x)}</span>`).join('')}</div></div>` : '';
+  app.innerHTML = `
+  <a href="#/" style="align-self:flex-start;text-decoration:none">← Kütüphane</a>
+  <div class="row between" style="align-items:flex-start"><div style="flex:1 1 560px;min-width:0">
+    <h1 style="font-size:30px;line-height:1.25;overflow-wrap:anywhere">${esc(d.baslik)}</h1>
+    <div class="muted row" style="font-size:14px;gap:6px 16px;margin-top:8px"><span>${esc(d.kanal)}</span>${vid ? `<span>${fmtDur(d.sure)}</span>` : ''}<span>${esc(fmtDate(d.tarih))}</span><a href="${esc(safeUrl(d.url))}" target="_blank" rel="noopener">Kaynağı aç</a></div></div>
+    <div class="row" style="gap:8px"><button class="btn" id="copy">Özeti kopyala</button><button class="btn" id="redo">Baştan üret</button>
+    ${d.not_yolu ? '<button class="btn" id="reveal">Finder\'da göster</button>' : ''}
+    ${d.obsidian ? `<a class="btn dark" href="${esc(d.obsidian)}">Obsidian'da aç</a>` : ''}<button class="btn del" id="del">Sil</button></div></div>
+  ${d.ses ? `<div class="card player" style="padding:16px 20px"><div><strong>Sesli özet</strong><div class="muted" style="font-size:13px">Yerel Türkçe ses</div></div><audio controls preload="none" src="/api/audio/${encodeURIComponent(d.id)}"></audio></div>` : ''}
+  ${d.aciklama ? `<details class="card" style="padding:16px 20px"><summary style="cursor:pointer;font-weight:600">Video açıklaması</summary><p style="margin:12px 0 0;white-space:pre-wrap;overflow-wrap:anywhere;font-size:14px;color:var(--ink2);line-height:1.6">${esc(d.aciklama)}</p></details>` : ''}
+  <div class="cols"><div style="flex:999 1 560px;display:flex;flex-direction:column;gap:24px">
+    <section class="card"><h2 style="margin-bottom:16px">Kısa özet</h2>${kisa.length ? `<ul style="margin:0;padding-left:20px;display:flex;flex-direction:column;gap:10px;line-height:1.6;color:var(--ink2)">${kisa.map((k) => `<li>${esc(k)}</li>`).join('')}</ul>` : '<p class="muted">Özet henüz üretilmemiş.</p>'}</section>
+    <section class="card" style="display:flex;flex-direction:column;gap:16px" aria-labelledby="qh"><div class="row between"><h2 id="qh">Soru sor</h2><button class="btn" id="qclear" style="min-height:36px;font-size:13px" hidden>Sohbeti temizle</button></div>
+      <p class="muted" style="margin:0;font-size:14px">Bu ${vid ? 'videonun transkripti' : 'yazının metni'} ve özeti üzerinden yerel modele soru sorun.</p>
+      <div class="chat" id="chat"></div>
+      <form class="chatform" id="qform"><label for="qin" class="sr">Soru</label><textarea id="qin" rows="1" placeholder="Örn. Konuşmacı X hakkında ne diyor? (Enter gönderir, Shift+Enter yeni satır)"></textarea><button class="btn pri" id="qgo">Sor</button></form>
+    </section>
+    ${(o.bolumler || []).length ? `<section class="card" style="display:flex;flex-direction:column;gap:16px"><h2>Bölümler</h2>${o.bolumler.map((b, i) => {
+      const u = tsUrl(b.baslangic);
+      const ad = String(b.baslik || '').replace(/^\d+[.)]\s+/, '').trim();
+      const t = vid ? `${fmtDur(b.baslangic)} – ${fmtDur(b.bitis)}` : `${i + 1}. ${ad || 'Bölüm'}`;
+      const etiket = u ? `<a href="${esc(u)}" target="_blank" rel="noopener" class="mono" style="font-size:14px;text-decoration:none;background:var(--brand-bg);border-radius:6px;padding:4px 10px;align-self:flex-start">${t}</a>` : `<span style="font-weight:600">${esc(t)}</span>`;
+      return `<article style="display:flex;flex-direction:column;gap:6px">${etiket}<p style="margin:0;line-height:1.65;color:var(--ink2)">${esc(b.ozet)}</p></article>`;
+    }).join('')}</section>` : ''}
+    ${d.transkript ? `<section class="card" style="display:flex;flex-direction:column;gap:16px"><div class="row between"><h2>Transkript</h2>
+      <label class="sr" for="tq">Transkriptte ara</label><input class="inp" id="tq" type="search" placeholder="Transkriptte ara" style="width:240px"></div>
+      <div id="tr" style="max-height:520px;overflow:auto;display:flex;flex-direction:column;gap:2px"><span class="muted">Yükleniyor…</span></div></section>` : ''}</div>
+  <aside style="flex:1 1 360px;display:flex;flex-direction:column;gap:24px">
+    <section class="card" style="padding:24px;display:flex;flex-direction:column;gap:16px"><div class="row between"><h2>İddia kontrolü</h2><span class="muted" style="font-size:13px">${d.iddialar.length} iddia</span></div>
+      ${d.iddialar.length ? `<div class="row" style="gap:6px">${Object.keys(HUKUM).map((k) => `<span class="pill v-${k}">${HUKUM[k]} · ${say[k] || 0}</span>`).join('')}</div>
+      <div>${d.iddialar.map((c) => `<div class="claim"><span class="pill v-${esc(c.hukum)}" style="align-self:flex-start">${esc(HUKUM[c.hukum] || c.hukum)}</span><p>${esc(c.iddia)}</p><p class="why">${esc(c.gerekce)}</p>
+        ${c.duzeltme ? `<p style="font-size:13px"><strong>Doğrusu:</strong> ${esc(c.duzeltme)}</p>` : ''}
+        ${(c.kaynaklar || []).map((k) => `<a style="font-size:13px;overflow-wrap:anywhere" href="${esc(safeUrl(k.url))}" target="_blank" rel="noopener">${esc(k.baslik || k.url)}</a>`).join('')}</div>`).join('')}</div>`
+      : '<p class="muted" style="margin:0">Bu kayıt için doğrulama yapılmamış. “Baştan üret” ile doğrulamalı yeniden işleyebilirsiniz.</p>'}</section>
+    <section class="card" style="padding:24px;display:flex;flex-direction:column;gap:16px"><h2>Bağlantılar</h2>${list('Konular', o.konular)}${list('Kişiler', o.kisiler)}
+      ${(o.etiketler || []).length ? `<div style="display:flex;flex-direction:column;gap:8px"><span class="sect">Etiketler</span><div class="row muted" style="gap:6px;font-size:13px">${o.etiketler.map((e) => `<span>#${esc(e)}</span>`).join('')}</div></div>` : ''}</section>
+    ${o.num_ctx ? `<section class="card" style="padding:24px;display:flex;flex-direction:column;gap:10px"><h2 style="font-size:15px">Model bağlamı</h2><div class="bar"><i style="width:${Math.min(100, o.baglam_token / o.num_ctx * 100)}%;background:var(--ink)"></i></div><span class="mono muted" style="font-size:13px">${o.baglam_token} / ${o.num_ctx} token</span></section>` : ''}
+  </aside></div>`;
+  $('#redo').onclick = async () => {
+    if (!confirm('Transkript, özet ve doğrulama yeniden üretilecek. Devam edilsin mi?')) return;
+    try { const j = await api('/api/jobs', { method: 'POST', body: { url: d.url, dogrula: true, ses: d.ses, bastan: true } }); location.hash = '#/jobs/' + j.id; } catch (x) { alert(x.message); }
+  };
+  $('#del').onclick = async () => {
+    if (!confirm('Bu kayıt silinecek: veri klasörü, Obsidian notu, transkript notu ve sesli özet. Geri alınamaz. Devam edilsin mi?')) return;
+    try { await api('/api/item/' + encodeURIComponent(d.id), { method: 'DELETE' }); location.hash = '#/'; } catch (x) { alert(x.message); }
+  };
+  if ($('#reveal')) $('#reveal').onclick = () => api('/api/reveal', { method: 'POST', body: { yol: d.not_yolu } }).catch((x) => alert(x.message));
+  setupChat(d.id);
+  $('#copy').onclick = async (e) => {
+    const md = `## ${d.baslik}\n\n${kisa.map((k) => '- ' + k).join('\n')}\n\nKaynak: ${d.url}\n`;
+    try { await navigator.clipboard.writeText(md); e.target.textContent = 'Kopyalandı'; } catch { e.target.textContent = 'Kopyalanamadı'; }
+    setTimeout(() => { e.target.textContent = 'Özeti kopyala'; }, 1800);
+  };
+  if (d.transkript) {
+    const segs = await api('/api/transcript/' + encodeURIComponent(d.id)).catch(() => []);
+    const paintT = (q) => {
+      const ql = (q || '').toLocaleLowerCase('tr');
+      const f = ql ? segs.filter((s) => s.t.toLocaleLowerCase('tr').includes(ql)) : segs;
+      $('#tr').innerHTML = f.length ? f.map((s) => {
+        const u = tsUrl(s.s);
+        const ts = u ? `<a class="mono" href="${esc(u)}" target="_blank" rel="noopener" style="font-size:13px;text-decoration:none;flex:0 0 64px">${fmtDur(s.s)}</a>` : `<span class="mono muted" style="font-size:13px;flex:0 0 64px">${fmtDur(s.s)}</span>`;
+        return `<div style="display:flex;gap:12px;padding:6px 0;border-bottom:1px solid #F0F1F4">${ts}<span style="color:var(--ink2);font-size:14px">${esc(s.t)}</span></div>`;
+      }).join('') : '<span class="muted">Eşleşen satır yok.</span>';
+    };
+    paintT(''); $('#tq').oninput = (e) => paintT(e.target.value);
+  }
+}
+
+/* ---------- Soru-cevap ---------- */
+async function setupChat(id) {
+  const box = $('#chat'), inp = $('#qin'), go = $('#qgo'), clr = $('#qclear');
+  let hist = await api('/api/chat/' + encodeURIComponent(id)).catch(() => []);
+  const bubble = (rol, t) => `<div class="msg ${rol === 'user' ? 'u' : 'a'}">${esc(t)}</div>`;
+  const paint = () => {
+    box.innerHTML = hist.map((m) => bubble(m.rol, m.icerik)).join('');
+    box.hidden = !hist.length; clr.hidden = !hist.length; box.scrollTop = box.scrollHeight;
+  };
+  paint();
+  clr.onclick = async () => { if (!confirm('Sohbet geçmişi silinsin mi?')) return; await api('/api/chat/' + encodeURIComponent(id), { method: 'DELETE' }).catch(() => {}); hist = []; paint(); };
+  inp.onkeydown = (e) => { if (e.key === 'Enter' && !e.shiftKey && !e.isComposing) { e.preventDefault(); $('#qform').requestSubmit(); } };
+  $('#qform').onsubmit = async (e) => {
+    e.preventDefault();
+    const soru = inp.value.trim(); if (!soru || go.disabled) return;
+    go.disabled = true; inp.value = '';
+    box.hidden = false;
+    box.insertAdjacentHTML('beforeend', bubble('user', soru) + '<div class="msg a" id="ans">Düşünüyor…</div>');
+    box.scrollTop = box.scrollHeight;
+    const ans = $('#ans'); let yanit = '';
+    try {
+      const r = await fetch('/api/chat/' + encodeURIComponent(id), { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ soru }) });
+      if (!r.ok) { const j = await r.json().catch(() => ({})); throw new Error(j.detail || 'İstek başarısız'); }
+      const rd = r.body.getReader(), dec = new TextDecoder();
+      for (;;) { const { done, value } = await rd.read(); if (done) break; yanit += dec.decode(value, { stream: true }); ans.textContent = yanit; box.scrollTop = box.scrollHeight; }
+      if (!yanit.trim()) ans.textContent = 'Model boş yanıt verdi.';
+    } catch (x) { ans.textContent = 'Hata: ' + x.message; }
+    ans.removeAttribute('id');
+    hist = await api('/api/chat/' + encodeURIComponent(id)).catch(() => hist);
+    clr.hidden = !hist.length;
+    go.disabled = false; inp.focus();
+  };
+}
+
+/* ---------- Ayarlar ---------- */
+const FIELDS = [
+  ['Genel', [['genel.vault', 'Obsidian vault', 'text'], ['genel.veri_klasoru', 'Veri klasörü', 'text'], ['genel.ozet_dili', 'Özet dili (kaynak: İngilizce içerik İngilizce özetlenir)', 'sel:kaynak|tr|en']]],
+  ['Dil modeli · Ollama', [['ollama.model', 'Model', 'text'], ['ollama.num_ctx', 'Bağlam (num_ctx)', 'number'], ['ollama.num_predict', 'En fazla çıktı (num_predict)', 'number'], ['ollama.temperature', 'Sıcaklık', 'number'], ['ollama.think', 'Düşünme (think)', 'think'], ['ollama.keep_alive', 'Modeli bellekte tutma süresi (ör. 5m, 30m)', 'text']]],
+  ['Görev başına model · boşsa ana model', [['ollama.model_ozet', 'Özet modeli', 'text'], ['ollama.model_iddia', 'İddia çıkarma modeli', 'text'], ['ollama.model_hukum', 'Hüküm modeli', 'text'], ['ollama.think_hukum', 'Hüküm için düşünme (boş: ana ayar)', 'sel:|false|low|medium|high|xhigh'], ['ollama.model_sohbet', 'Sohbet modeli', 'text']]],
+  ['Yazıya dökme · Whisper', [['whisper.model', 'Model', 'text'], ['whisper.bolum_saniye', 'Parça uzunluğu (saniye)', 'number']]],
+  ['İddia kontrolü · Web araması', [['arama.saglayici', 'Sağlayıcı (ddgs veya brave)', 'text'], ['arama.bolge', 'Bölge', 'text'], ['arama.backend', 'Arama motorları (sırayla)', 'text'], ['arama.max_iddia', 'En çok iddia', 'number'], ['arama.max_sonuc', 'İddia başına sonuç', 'number'], ['arama.sayfa_karakter', 'Sayfa başına karakter', 'number']]],
+  ['Yazı ve ses', [['yazi.bolum_karakter', 'Yazı bölümü üst sınırı (karakter)', 'number'], ['yazi.paket_karakter', 'Tek çağrıda özetlenen metin (karakter)', 'number'], ['yazi.alternatif_kaynak', 'Kesik yazıda yazarın ücretsiz kopyasını ara', 'sel:true|false'], ['yazi.cerez_tarayici', 'Üyelik için tarayıcı çerezi (boş, chrome, safari, firefox…)', 'text'], ['ses.ses', 'Türkçe ses (macOS)', 'text'], ['ses.ses_en', 'İngilizce ses (macOS)', 'text']]]
+];
+async function viewSettings() {
+  setNav('n-set'); stop();
+  const v = await api('/api/settings').catch(() => ({}));
+  const vb = await api('/api/vault').catch(() => null);
+  $('#app').innerHTML = `<div class="row between" style="align-items:flex-end"><div><h1>Ayarlar</h1><span class="mono muted" style="font-size:13px">config.toml</span></div><button class="btn pri" id="save">Kaydet</button></div>
+  <div id="smsg"></div>
+  ${vb ? `<section class="card" style="display:flex;flex-direction:column;gap:12px"><h2 style="font-size:17px">Obsidian vault</h2>
+    <div class="mono" style="font-size:14px;overflow-wrap:anywhere">${esc(vb.yol)}</div>
+    <p class="muted" style="margin:0;font-size:14px">${vb.var ? 'Notlar bu klasöre yazılır. Obsidian\'da ilk kez açarken “Open folder as vault” ile bu klasörü seçin; sonra “Obsidian\'da aç” bağlantıları çalışır.' : 'Klasör henüz yok; ilk işlemde oluşturulur.'}</p>
+    ${vb.var ? `<div class="row" style="gap:8px"><a class="btn dark" href="${esc(vb.obsidian)}">Vault'u Obsidian'da aç</a><button class="btn" id="vreveal">Finder'da göster</button></div>` : ''}</section>` : ''}
+  ${FIELDS.map(([t, fs]) => `<section class="card" style="display:flex;flex-direction:column;gap:20px"><h2 style="font-size:17px">${t}</h2>
+    ${t.startsWith('Dil') ? '<div class="row"><button class="btn" id="ctx">Bağlamı ölç</button><span class="muted" style="font-size:14px">Modele num_ctx uygulanıp uygulanmadığını sınar. Model yüklü olmalı.</span></div><div id="ctxmsg"></div>' : ''}
+    <div class="grid">${fs.map(([k, l, ty]) => `<div class="field"><label for="f-${k}">${l}</label>${ty === 'think'
+      ? `<select class="inp mono" id="f-${k}" data-k="${k}">${['false', 'low', 'medium', 'high', 'xhigh'].map((o) => `<option ${String(v[k]) === o ? 'selected' : ''}>${o}</option>`).join('')}</select>`
+      : ty.startsWith('sel:')
+      ? `<select class="inp mono" id="f-${k}" data-k="${k}">${ty.slice(4).split('|').map((o) => `<option value="${o}" ${String(v[k] ?? '') === o ? 'selected' : ''}>${o || '(ana ayar)'}</option>`).join('')}</select>`
+      : `<input class="inp ${ty === 'number' ? '' : 'mono'}" id="f-${k}" data-k="${k}" type="${ty}" ${k.endsWith('temperature') ? 'step="0.1" min="0" max="2"' : ''} value="${esc(v[k] ?? '')}">`}</div>`).join('')}</div></section>`).join('')}`;
+  $('#save').onclick = async () => {
+    const body = {}; document.querySelectorAll('[data-k]').forEach((e) => { body[e.dataset.k] = e.value; });
+    try { await api('/api/settings', { method: 'PUT', body }); $('#smsg').innerHTML = '<div class="okmsg">Kaydedildi. Yeni ayarlar sonraki işlemde geçerli olur.</div>'; refreshChrome(); }
+    catch (x) { $('#smsg').innerHTML = `<div class="err">${esc(x.message)}</div>`; }
+    scrollTo({ top: 0, behavior: 'smooth' });
+  };
+  if ($('#vreveal')) $('#vreveal').onclick = () => api('/api/reveal', { method: 'POST', body: {} }).catch((x) => alert(x.message));
+  $('#ctx').onclick = async (e) => {
+    e.target.disabled = true; $('#ctxmsg').innerHTML = '<div class="muted">Ölçülüyor…</div>';
+    try { const r = await api('/api/context', { method: 'POST' }); $('#ctxmsg').innerHTML = `<div class="${r.uygulandi ? 'okmsg' : 'err'}">prompt_eval_count=${r.token} · num_ctx=${r.num_ctx} · ${r.uygulandi ? 'Bağlam 4096 sınırını aşıyor, ayar uygulanıyor.' : 'Bağlam varsayılan 4096 sınırında kalmış görünüyor.'}</div>`; }
+    catch (x) { $('#ctxmsg').innerHTML = `<div class="err">${esc(x.message)}</div>`; }
+    e.target.disabled = false;
+  };
+}
+
+/* ---------- yönlendirme ---------- */
+async function route() {
+  const [, p, arg] = location.hash.split('/');
+  try {
+    if (p === 'jobs') await viewJobs(arg);
+    else if (p === 'item') await viewItem(decodeURIComponent(arg || ''));
+    else if (p === 'settings') await viewSettings();
+    else await viewLibrary();
+  } catch (x) { $('#app').innerHTML = `<div class="err">${esc(x.message)}</div>`; }
+  refreshChrome();
+}
+addEventListener('hashchange', route);
+route();
+</script>
+</body>
+</html>

@@ -1,0 +1,35 @@
+Bir iddiayı YALNIZCA aşağıdaki kaynak metinlerine göre değerlendir.
+Kendi bilgini kullanma. Uydurma URL yazma; kaynaklar alanına yalnızca aşağıdaki URL satırlarını birebir kopyala.
+
+Bugünün tarihi: {bugun}
+İçeriğin yayın tarihi: {yayin}
+
+Yalnızca JSON yaz:
+{"hukum": "dogru", "gerekce": "en fazla üç cümle", "duzeltme": "", "kaynaklar": ["https://..."]}
+
+hukum şunlardan biri:
+- dogru: en az bir kaynak, AYNI konuyu ele alıp iddiayı açıkça destekliyor
+- yanlis: en az bir kaynak, AYNI kişi/olay/ürün hakkında iddianın tersini açıkça söylüyor
+- eksik: iddianın bir kısmı doğru, önemli bir kısmı kaynaklarca açıkça çürütülüyor
+- eskimis: iddia yayın tarihinde doğruydu ama kaynaklar bugün değiştiğini açıkça gösteriyor
+- dogrulanamadi: kaynaklar konuyu ele almıyor, başka bir kişi/yazı/ürün hakkında, ya da yetersiz
+
+Kaynak değerlendirmesi:
+- Kurumun kendi sitesi, resmi belge, akademik yayın ve köklü haber kuruluşu güçlü kaynaktır; kişisel blog, içerik çiftliği ve SEO sitesi zayıftır.
+- Başlığı iddiayı tekrarlayan bir blog yazısı tek başına yeterli değildir; metnin iddiayı somut olarak desteklemesi gerekir.
+- Şaşırtıcı veya önemli bir iddiayı yalnızca zayıf kaynaklar destekliyorsa dogrulanamadi de.
+- "(yazının kendi bağlantısı)" işaretli kaynak, yazarın dayandığı sayfadır; iddiayı açıkça destekliyorsa yeterlidir.
+
+Önemli:
+- Bir kaynağın iddiadan söz etmemesi iddiayı ÇÜRÜTMEZ; bu durumda dogrulanamadi de.
+- Kaynak başka bir yazıdan, kişiden veya üründen bahsediyorsa konu dışıdır: dogrulanamadi.
+- İddiadaki göreli zaman ifadeleri ("iki gün önce", "geçen hafta") bugünün tarihine göre DEĞİL, içeriğin yayın tarihine göredir. Yazı yayından birkaç gün önce yazılmış olabilir; birkaç günlük fark tek başına yanlis sebebi değildir.
+- Emin değilsen dogrulanamadi de. Yanlış "yanlis" hükmü, "dogrulanamadi"dan çok daha zararlıdır.
+- gerekce ve duzeltme {dil} olsun; kaynaklar başka dilde olsa da.
+- duzeltme: yalnızca hukum yanlis, eksik veya eskimis ise kaynaklara göre doğru bilgi, en fazla iki cümle; diğerlerinde boş string.
+
+İDDİA:
+{iddia}
+
+KAYNAKLAR:
+{kaynaklar}

@@ -1,0 +1,22 @@
+Aşağıda bir yazının bölüm özetleri var. Çıktı dili: {dil}.
+Yalnızca JSON yaz:
+{"tur": "...", "tez": "...", "kisa": ["..."], "dayanak": ["..."], "cikarimlar": ["..."], "ogeler": [{"ad": "...", "aciklama": "..."}], "adimlar": ["..."], "konular": ["..."], "kisiler": ["..."], "etiketler": ["..."]}
+
+tur: yazının türü, şunlardan biri: liste (araç, ürün, kaynak veya fikir sıralayan), kavram (terimleri tek tek açıklayan), rehber (adım adım nasıl yapılır), yol_haritasi (bir alanı öğrenmek için aşamalı plan), gorus (yazarın savunduğu bir tez), haber, inceleme, diger.
+kisa: yazının tamamını anlatan 5-8 madde, her biri tek cümle, {dil}. Bilgiyi doğrudan söyle; "Yazı ... anlatıyor", "The article explains" gibi anlatıcı kalıplarını KULLANMA. Okuyan kişi yazıyı okumadan ana fikirleri öğrenebilmeli. Yazının sonunu da kapsa; yazı bir liste ise listedeki öğeleri kapsa ve her maddede öğenin somut örneğini (kim, ne yaptı, sayı) ver. Bilgi uydurma.
+Tüm alanlarda: kimin ne yaptığını karıştırma ("A, B'nin yaptığı X'i paylaştı" ise X'i yapan B'dir); övgü, tahmin, rakip yorumu ("X için büyük tehdit") ve kanıtsız karşılaştırmalar "ben" geçmese de görüştür, olgu gibi yazma, sahibini belirt ("Yazara göre ...", "According to <kişi>, ..."); sayıları yuvarlama; özetlerdeki uyarı ve sınırlamaları atlama.
+{kismi}
+{gorus}
+cikarimlar: okuyucunun bu yazıdan sonra uygulayabileceği 2-5 somut öneri, her biri tek cümle, {dil}. Yalnızca özetlerde açıkça geçen bir ipucuna, uyarıya veya öneriye dayananlar; kendi genel tavsiyeni ekleme; yoksa boş liste.
+ogeler: yalnızca tur liste veya kavram ise doldur; HER öğe için {"ad": öğenin özgün adı, "aciklama": tek cümle, {dil}}. Diğer türlerde boş liste.
+adimlar: yalnızca tur rehber veya yol_haritasi ise doldur; sırayla yapılacaklar, kısa cümleler, {dil}, en fazla 12. Diğer türlerde boş liste.
+Yazarın kendi ürününü, hizmetini, kursunu veya diğer yazılarını tanıtması ve abonelik çağrıları kisa ve cikarimlar içine girmesin.
+konular: en fazla 5, HER ZAMAN Türkçe, kısa ad (örnek: "Yapay Zeka"). Başlığı olduğu gibi konu yapma.
+kisiler: en fazla 5, yalnızca açıkça adı geçen gerçek kişiler.
+etiketler: en fazla 5, HER ZAMAN Türkçe, küçük harf, tek kelime, boşluksuz.
+
+Yazı: {baslik}
+Yazar: {yazar}
+
+BÖLÜM ÖZETLERİ:
+{bolumler}

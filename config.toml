@@ -1,0 +1,65 @@
+# VideoToInfo ayarları. Yollar ~ ile yazılabilir.
+# Kişisel kopya depo dışındaysa: VIDEOTOINFO_CONFIG=/yol/config.toml
+# Kurulum: uv sync --no-editable --group dev
+# Komut: uv run vti add "https://..." [--dogrula] [--ses]
+# Yazı:  vault'taki "Gelen kutusu" notuna link yapıştırın, sonra uv run vti kuyruk
+
+[genel]
+veri_klasoru = "data"
+vault = "~/Documents/VideoToInfo-Vault"
+# kaynak: İngilizce içerik İngilizce özetlenir ve seslendirilir, diğerleri Türkçe. tr veya en ile sabitlenir.
+ozet_dili = "kaynak"
+
+[ollama]
+model = "qwen3.8:27b-mlx"
+# Uzun transkriptin sessizce kesilmemesi için bağlam açıkça verilir.
+num_ctx = 16384
+temperature = 0.3
+num_predict = 2048
+# false, low, medium, high, xhigh
+think = "false"
+keep_alive = "30m"
+# Görev başına model. Boş bırakılırsa yukarıdaki model kullanılır.
+# 2026-11-12 eval (scripts/model_eval.py): Gemma hükümde daha temkinli ve 5-10 kat hızlı;
+# Türkçe özette Qwen daha ayrıntılı olduğu için özet Qwen'de kaldı.
+# Farklı modeller sırayla yüklenir; 36 GB bellekte iki büyük model aynı anda tutulmaz.
+model_ozet = ""
+model_iddia = "gemma4:26b-mlx"
+model_hukum = "gemma4:26b-mlx"
+# Hüküm adımı için ayrı think ayarı. Boşsa yukarıdaki think kullanılır.
+think_hukum = ""
+model_sohbet = "gemma4:26b-mlx"
+
+[whisper]
+model = "mlx-community/whisper-large-v3-turbo"
+bolum_saniye = 600
+
+[arama]
+# Sağlayıcı seçimi: ddgs anahtarsızdır ve Docker istemez.
+# brave seçilirse BRAVE_API_KEY ortam değişkeni gerekir.
+saglayici = "ddgs"
+bolge = "tr-tr"
+# auto bu makinede sık boş dönüyor. Sırayla denenir.
+backend = "bing,google,yahoo"
+max_sonuc = 5
+max_iddia = 8
+sayfa_karakter = 3500
+
+[yazi]
+# Yazı bölümlere ayrılırken bir bölümün yaklaşık üst karakter sınırı.
+bolum_karakter = 6000
+# Bu kadar karaktere kadar ardışık bölümler tek model çağrısında özetlenir.
+paket_karakter = 12000
+# Kesik (üyelere özel) yazıda, yazarın aynı yazıyı yayımladığı ücretsiz bir sayfa aranır.
+# Paywall aşan aynalar (freedium vb.) kullanılmaz.
+alternatif_kaynak = true
+# Medium üyeliğiniz varsa tarayıcı adı (chrome, safari, firefox, brave, edge).
+# Çerezler yalnızca yazının alan adı için okunur. Boşsa kullanılmaz.
+cerez_tarayici = ""
+
+[ses]
+# macOS yerleşik Türkçe sesi. Kalite yetmezse tts.py içindeki arayüz değiştirilir.
+ses = "Yelda"
+# İngilizce özetler için. Daha doğal ses: Sistem Ayarları > Erişilebilirlik > Seslendirilen İçerik'ten
+# bir Premium/Enhanced ses indirip adını buraya yazın.
+ses_en = "Samantha"

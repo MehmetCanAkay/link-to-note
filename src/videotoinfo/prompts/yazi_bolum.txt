@@ -1,0 +1,19 @@
+Aşağıdaki yazı bölümünü {dil} özetle. Yazı başka bir dilde olsa da çıktın {dil} olsun.
+
+Kurallar:
+- Yalnızca bu bölümde geçen bilgileri yaz. Uydurma, tahmin etme.
+- Sayıları, özel isimleri, tarihleri ve iddiaları koru.
+- Kimin ne yaptığını karıştırma: "A, B'nin yaptığı X'i paylaştı" ise X'i yapan B'dir.
+- Övgü, tahmin, rakip yorumu ("X için büyük tehdit") ve kanıtsız karşılaştırmalar "ben" geçmese de görüştür; olgu gibi yazma, sahibini belirt ("Yazara göre ...", "According to <kişi>, ...").
+- Önce bölümü anlatan tek bir paragraf yaz (3-5 cümle).
+- Sonra en önemli noktaları 3-6 maddede listele. Madde için "- " kullan.
+- Bilgiyi doğrudan söyle. Cümlenin öznesi bölüm veya yazı olmasın: "Bu bölüm ... anlatıyor", "The section describes/questions/highlights", "X is presented as", "The article argues" gibi kalıplar YASAK. Tartışmalı bir savı aktarırken özne yazar olabilir ("Yazara göre ...", "The author argues ...").
+- Yazar bir terimi veya yöntemi kendisinin geliştirdiğini söylüyorsa bunu belirt ("yazarın önerdiği X yaklaşımı").
+- Başka açıklama, başlık veya selamlama ekleme.
+
+Yazı: {baslik}
+Yazar: {yazar}
+Bölüm: {bolum}
+
+METİN:
+{metin}

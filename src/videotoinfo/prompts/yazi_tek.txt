@@ -1,0 +1,42 @@
+Aşağıdaki yazıyı özetle. Çıktı dili: {dil}. Yazı başka bir dilde olsa da özetler {dil} olsun.
+Yalnızca JSON yaz:
+{"tur": "...", "tez": "...", "kisa": ["..."], "dayanak": ["..."], "cikarimlar": ["..."], "ogeler": [{"ad": "...", "aciklama": "..."}], "adimlar": ["..."], "bolumler": [{"no": 1, "ozet": "..."}], "konular": ["..."], "kisiler": ["..."], "etiketler": ["..."]}
+
+Tüm alanlarda:
+- Kimin ne yaptığını karıştırma: "A, B'nin yaptığı X'i paylaştı" ise X'i yapan B'dir; A'yı yapan gibi yazma.
+- Değerlendirmeler "ben" geçmese de görüştür: övgü, tahmin ("olacak", "başa geçebilir"), rakip yorumu ("X için büyük tehdit", "artık X'e gerek yok"), kanıtsız karşılaştırma ("bir hafta sürerdi", "genelde 50 bin dolar tutar"). Bunları olgu gibi yazma; sahibini belirt ("Yazara göre ...", "According to <kişi>, ...").
+- Sayıları, süreleri ve fiyatları yuvarlamadan aynen aktar.
+- Yazıdaki uyarıları ve sınırlamaları ("X değildir", "hata beklenir", "sürümü sabitle") atlama.
+
+tur: yazının türü, şunlardan biri:
+- liste: araç, ürün, kaynak veya fikirleri sıralayan yazı ("10 faydalı MCP sunucusu")
+- kavram: terimleri veya kavramları tek tek açıklayan yazı ("bilmeniz gereken 8 terim")
+- rehber: bir işin nasıl yapılacağını adım adım anlatan yazı
+- yol_haritasi: bir alanı öğrenmek için aşamalı plan
+- gorus: yazarın bir tezi savunduğu yazı
+- haber: bir olayı veya duyuruyu aktaran yazı
+- inceleme: bir ürünü, kitabı veya çalışmayı değerlendiren yazı
+- diger
+kisa: yazının tamamını anlatan 4-8 madde, her biri tek cümle. Bilgiyi doğrudan söyle; "Yazı ... anlatıyor", "Yazar ... diyor", "The article explains", "It describes" gibi anlatıcı kalıplarını KULLANMA; görüş aktarırken sahibini belirtmek serbest. Okuyan kişi yazıyı okumadan ana fikirleri ve öğrettiği şeyleri öğrenebilmeli. Giriş cümlelerine değil, yazının asıl içeriğine odaklan; yazı bir liste ise listedeki öğeleri kapsa ve her maddede öğenin somut örneğini (kim, ne yaptı, sayı) ver, "The model can ..." gibi genellemeye indirgeme.
+{kismi}
+{gorus}
+cikarimlar: okuyucunun bu yazıdan sonra uygulayabileceği 2-5 somut öneri, her biri tek cümle. Yalnızca yazıda açıkça geçen bir ipucuna, uyarıya veya öneriye dayananlar; kendi genel tavsiyeni ekleme; yoksa boş liste.
+ogeler: yalnızca tur liste veya kavram ise doldur; yazıdaki HER öğe için {"ad": öğenin özgün adı, "aciklama": ne olduğu veya ne işe yaradığı, tek cümle}. Diğer türlerde boş liste.
+adimlar: yalnızca tur rehber veya yol_haritasi ise doldur; sırayla yapılacaklar, her biri kısa bir cümle, en fazla 12. Diğer türlerde boş liste.
+bolumler: METİN içindeki her [B<no>] bölümü için bir öğe, aynı no ile. ozet:
+- Bölümün uzunluğuyla orantılı olsun: kısa bölüm 1-2 cümle; uzun bölüm 2-4 cümlelik paragraf, ardından gerekiyorsa "- " ile 2-6 madde.
+- Bilgiyi doğrudan söyle. Cümlenin öznesi bölüm veya yazı olmasın: "Bu bölüm ... anlatıyor", "The section describes/questions/highlights", "X is presented as", "The article argues" gibi kalıplar YASAK. Tartışmalı bir savı aktarırken özne yazar olabilir ("Yazara göre ...", "The author argues ...").
+- Yazar bir terimi veya yöntemi kendisinin geliştirdiğini söylüyorsa bunu belirt ("yazarın önerdiği X yaklaşımı").
+- Sayıları, özel isimleri, tarihleri ve teknik terimleri koru. Terimin özgün adını parantez içinde ver.
+- Bölümde önerilen kitap, kurs, araç veya kaynak varsa adlarını yaz.
+- Bölümde olmayan bilgi ekleme.
+Yazarın kendi ürününü, hizmetini, kursunu veya diğer yazılarını tanıttığı kısımları, abonelik ve takip çağrılarını özetleme; kisa ve cikarimlar içine de koyma.
+konular: en fazla 5, HER ZAMAN Türkçe, kısa ad (örnek: "Yapay Zeka"). Başlığı olduğu gibi konu yapma.
+kisiler: en fazla 5, yalnızca metinde açıkça adı geçen gerçek kişiler.
+etiketler: en fazla 5, HER ZAMAN Türkçe, küçük harf, tek kelime, boşluksuz.
+
+Yazı: {baslik}
+Yazar: {yazar}
+
+METİN:
+{metin}
